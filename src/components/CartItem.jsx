@@ -78,7 +78,16 @@ function CartItem() {
         </div>
       ))}
 
-      <button onClick={handleCheckout}>Checkout</button>
+      <button className="continue-shopping">
+        Continue Shopping
+      </button>
+
+      <button
+        className="checkout-button"
+        onClick={handleCheckout}
+      >
+        Checkout
+      </button>
     </div>
   );
 }
