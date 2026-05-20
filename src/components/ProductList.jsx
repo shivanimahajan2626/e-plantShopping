@@ -22,12 +22,15 @@ const plants = {
 
 function ProductList() {
   const [cartCount, setCartCount] = useState(0);
+
   const [addedItems, setAddedItems] = useState([]);
 
   const addToCart = (plant) => {
     setCartCount(cartCount + 1);
 
-    setAddedItems([...addedItems, plant.id]);
+    setAddedItems((prev) => [...prev, plant.id]);
+
+    console.log("Dispatching item to Redux store", plant);
 
     alert(`${plant.name} added to cart`);
   };
@@ -54,11 +57,13 @@ function ProductList() {
               <p>${plant.price}</p>
 
               <button
-                onClick={() => addToCart(plant)}
+                onClick={() => {
+                  addToCart(plant);
+                }}
                 disabled={addedItems.includes(plant.id)}
               >
                 {addedItems.includes(plant.id)
-                  ? "Added"
+                  ? "Added to Cart"
                   : "Add to Cart"}
               </button>
             </div>
