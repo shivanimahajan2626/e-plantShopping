@@ -1,24 +1,46 @@
 import { useState } from "react";
 
 function CartItem() {
-  const [quantity, setQuantity] = useState(1);
+  const [cart, setCart] = useState([
+    {
+      id: 1,
+      name: "Snake Plant",
+      price: 20,
+      quantity: 1,
+      image: "snake.jpg",
+    },
+  ]);
 
-  const price = 20;
-  const totalAmount = quantity * price;
-
-  const handleIncrement = () => {
-    setQuantity(quantity + 1);
+  const handleIncrement = (id) => {
+    setCart(
+      cart.map((item) =>
+        item.id === id
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      )
+    );
   };
 
-  const handleDecrement = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
+  const handleDecrement = (id) => {
+    setCart(
+      cart
+        .map((item) =>
+          item.id === id
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
+        )
+        .filter((item) => item.quantity > 0)
+    );
   };
 
-  const handleDelete = () => {
-    alert("Item removed from cart");
+  const handleDelete = (id) => {
+    setCart(cart.filter((item) => item.id !== id));
   };
+
+  const totalAmount = cart.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
 
   const handleCheckout = () => {
     alert("Checkout successful");
@@ -30,23 +52,31 @@ function CartItem() {
 
       <h2>Total Amount: ${totalAmount}</h2>
 
-      <div>
-        <img src="snake.jpg" alt="Snake Plant" width="100" />
+      {cart.map((item) => (
+        <div key={item.id}>
+          <img src={item.image} alt={item.name} width="100" />
 
-        <h3>Snake Plant</h3>
+          <h3>{item.name}</h3>
 
-        <p>Unit Price: $20</p>
+          <p>Unit Price: ${item.price}</p>
 
-        <p>Total Cost: ${totalAmount}</p>
+          <p>Total Cost: ${item.price * item.quantity}</p>
 
-        <button onClick={handleDecrement}>-</button>
+          <button onClick={() => handleDecrement(item.id)}>
+            -
+          </button>
 
-        <span>{quantity}</span>
+          <span>{item.quantity}</span>
 
-        <button onClick={handleIncrement}>+</button>
+          <button onClick={() => handleIncrement(item.id)}>
+            +
+          </button>
 
-        <button onClick={handleDelete}>Delete</button>
-      </div>
+          <button onClick={() => handleDelete(item.id)}>
+            Delete
+          </button>
+        </div>
+      ))}
 
       <button onClick={handleCheckout}>Checkout</button>
     </div>
